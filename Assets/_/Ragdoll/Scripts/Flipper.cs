@@ -1,16 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DB.HeelFlip.Ragdoll
 {
     public class Flipper : MonoBehaviour
     {
+        public void AddJoint()
+        {
+            _hipJoint = _pelvisRB.gameObject.AddComponent<ConfigurableJoint>();
+            _hipJoint.angularXDrive = hipS0;
+            _hipJoint.angularYZDrive = hipS1;
+        }
+
         [SerializeField] private ConfigurableJoint _leftKnee, _rightKnee, _leftHip, _rightHip;
+        [SerializeField] private ConfigurableJoint _leftFoot, _rightFoot;
+        [SerializeField] private ConfigurableJoint _hipJoint;
         [SerializeField] private Vector4 _leftHipGoal0, _rightHipGoal0;
         [SerializeField] private Vector4 _leftKneeGoal0, _rightKneeGoal0;
+        [SerializeField] private Rigidbody _pelvisRB;
+        [SerializeField] private Vector3 _angularVelocity;
 
-        private bool _isClinched = false;
+        private bool _isClinched = false, _pressed = false;
+        private float _rot = 0;
+
+        private JointDrive hipS0, hipS1;
 
         private void Update()
         {
@@ -18,11 +33,16 @@ namespace DB.HeelFlip.Ragdoll
             {
                 Toggle();
             }
+            if(!_isClinched && _pressed)
+            {
+                
+            }
         }
 
         private void Toggle()
         {
             if (!_isClinched) {
+                _pressed = true;
                 _isClinched = true;
 
                 _leftHip.targetRotation = new Quaternion(
@@ -56,6 +76,12 @@ namespace DB.HeelFlip.Ragdoll
             else
             {
                 _isClinched = false;
+                Destroy(_leftFoot);
+                Destroy(_rightFoot);
+
+                hipS0 = _hipJoint.angularXDrive;
+                hipS1 = _hipJoint.angularYZDrive;
+                Destroy(_hipJoint);
 
                 _leftHip.targetRotation = new Quaternion(
                     0,
