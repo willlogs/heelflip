@@ -32,19 +32,18 @@ namespace DB.HeelFlip
         public void Teleport(Vector3 position, Quaternion rotation, Transform entry, Transform exit)
         {
             BeforeTeleport?.Invoke(entry);
-            //puppetMaster.mode = PuppetMaster.Mode.Kinematic;
-            //puppetMaster.DisableImmediately();
+            puppetMaster.mode = PuppetMaster.Mode.Kinematic;
 
             Vector3 up = transform.up;
             transform.position = position;
             transform.rotation = rotation;
 
             Quaternion ftr = Quaternion.FromToRotation(up, transform.up);
-            Vector3 newVel = ftr * rb.velocity;
-            rb.velocity = newVel;
+            rb.velocity = ftr * rb.velocity.normalized * rb.velocity.magnitude;
 
-            //puppetMaster.mode = PuppetMaster.Mode.Active;
+            puppetMaster.mode = PuppetMaster.Mode.Active;
             puppetMaster.FixMusclePositionsAndRotations();
+            puppetMaster.Teleport(position, rotation, true);
         }
 
         [SerializeField] private PuppetMaster puppetMaster;
