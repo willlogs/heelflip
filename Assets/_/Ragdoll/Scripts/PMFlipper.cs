@@ -13,10 +13,11 @@ namespace DB.HeelFlip
         public UnityEvent OnJump;
         public BoolCondition isFeetAttached;
 
-        public void FeetAttached()
+        public void FeetAttached(Vector3 pivot)
         {
             _resetingRotation = true;
             _grounded = true;
+            _rotationPivot = pivot;
         }
 
         public void Die()
@@ -33,6 +34,7 @@ namespace DB.HeelFlip
         [SerializeField] private Vector3 _jump;
         [SerializeField] private Transform _feetT;
 
+        private Vector3 _rotationPivot;
         bool _jumpCue = false, _jumping = false, _resetingRotation = false, _grounded;
         Quaternion _goalRotation;
 
