@@ -30,7 +30,7 @@ namespace DB.HeelFlip.Ragdoll {
                     _layerMask,
                     QueryTriggerInteraction.Ignore
                 );
-                Vector3 pivot = hit.collider != null ? hit.point : _bottom;
+                Vector3 pivot = hit.collider != null ? hit.point : _bottom;                
 
                 _rb.transform.position = pivot + _rb.transform.position - _bottom;
 

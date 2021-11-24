@@ -28,13 +28,13 @@ public class CameraScript : MonoBehaviour, IPortalTransient
         {
             _gonnaTeleport = false;
             _canTeleport = false;
-
             Vector3 up = transform.up;
+
             transform.position = position;
             transform.rotation = rotation;
+
             Quaternion ftr = Quaternion.FromToRotation(up, transform.up);
-            _offset = ftr * _offset;
-            //SetOffset();
+            //_targetTransform.parent.rotation = ftr * _targetTransform.parent.rotation;
 
             TimeManager.Instance.DoWithDelay(1, () =>
             {
@@ -45,6 +45,7 @@ public class CameraScript : MonoBehaviour, IPortalTransient
 
     [SerializeField] private PortalRagdollTransit _target;
     [SerializeField] private float _lerpSpeed, _offsetSize = 2;
+    [SerializeField] private Transform _targetTransform;
 
     private Vector3 _offset, _telDiff, _forw;
     private bool _canTeleport = true, _gonnaTeleport;
@@ -64,7 +65,7 @@ public class CameraScript : MonoBehaviour, IPortalTransient
 
     private void FixedUpdate()
     {
-        Vector3 goalPos = _target.transform.position + _offset;
+        Vector3 goalPos = _targetTransform.position;
         if (_gonnaTeleport)
         {
             goalPos = transform.position + _telDiff;
