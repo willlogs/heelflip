@@ -36,26 +36,24 @@ namespace DB.HeelFlip
             Vector3 up = transform.up;
 
             // x is for right, y is for up, z is for forward
-            float velMag, camPosMag;
-            Vector3 velCoord, camPosCoord;
+            float velMag;
+            Vector3 velCoord;
             ToRelativeCoord(rb.velocity, out velMag, out velCoord);
-            ToRelativeCoord(_camTarget.position - transform.position, out camPosMag, out camPosCoord);
+            Quaternion bodyTR = Quaternion.AngleAxis(180, exit.up) * (exit.rotation * Quaternion.Inverse(entry.rotation) * _bodyT.rotation);
 
             // change position and rotation
             transform.position = position;
             transform.rotation = rotation;
 
-            // do misc
-            Quaternion ftr = Quaternion.Inverse(before) * rotation;
-            Quaternion ftr2 = Quaternion.FromToRotation(up, transform.up);
-
             rb.velocity = (transform.right * velCoord.x + transform.up * velCoord.y + transform.forward * velCoord.z).normalized * velMag;
 
-            _camTarget.parent.position = transform.position;
-            Vector3 relativePos = (transform.right * camPosCoord.x + transform.up * camPosCoord.y + transform.forward * camPosCoord.z).normalized * camPosMag;
-            _camTarget.transform.position = transform.position + relativePos;
+            Vector3 diff = exit.position - transform.position;
+            diff.y = 0;
+            transform.rotation = Quaternion.LookRotation(diff.normalized, Vector3.up);
 
-            _flipper.Rotate(ftr, ftr2);
+            _bodyT.parent = null;
+            _bodyT.rotation = bodyTR;
+            _bodyT.transform.parent = transform;
         }
 
         private void ToRelativeCoord(Vector3 input, out float mag, out Vector3 coord)
@@ -70,7 +68,7 @@ namespace DB.HeelFlip
         }
 
         [SerializeField] private PMFlipper _flipper;
-        [SerializeField] private Transform _camTarget;
+        [SerializeField] private Transform _camTarget, _bodyT, _pelvisT;
 
         private void Awake()
         {

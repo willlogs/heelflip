@@ -33,7 +33,7 @@ public class CameraScript : MonoBehaviour, IPortalTransient
             transform.position = position;
             transform.rotation = rotation;
 
-            Quaternion ftr = Quaternion.FromToRotation(up, transform.up);
+            //Quaternion ftr = Quaternion.FromToRotation(up, transform.up);
             //_targetTransform.parent.rotation = ftr * _targetTransform.parent.rotation;
 
             TimeManager.Instance.DoWithDelay(1, () =>
@@ -45,7 +45,7 @@ public class CameraScript : MonoBehaviour, IPortalTransient
 
     [SerializeField] private PortalRagdollTransit _target;
     [SerializeField] private float _lerpSpeed, _offsetSize = 2;
-    [SerializeField] private Transform _targetTransform;
+    [SerializeField] private Transform _targetTransform, _targetLookTransform, _tempLookT;
 
     private Vector3 _offset, _telDiff, _forw;
     private bool _canTeleport = true, _gonnaTeleport;
@@ -66,9 +66,11 @@ public class CameraScript : MonoBehaviour, IPortalTransient
     private void FixedUpdate()
     {
         Vector3 goalPos = _targetTransform.position;
+        Vector3 forw = _targetLookTransform.position - transform.position;
         if (_gonnaTeleport)
         {
-            goalPos = transform.position + _telDiff;
+            goalPos = transform.position + _telDiff * 6;
+            forw = _tempLookT.position - transform.position;
         }
 
         transform.position = Vector3.Lerp(
@@ -77,7 +79,7 @@ public class CameraScript : MonoBehaviour, IPortalTransient
             Time.fixedDeltaTime * _lerpSpeed
         );
 
-        //transform.forward = Vector3.Lerp(transform.forward, _forw, Time.deltaTime);
+        transform.forward = Vector3.Lerp(transform.forward, forw, Time.deltaTime);
     }
 
     private void BeforeTargetTeleport(Transform entry)
@@ -89,6 +91,7 @@ public class CameraScript : MonoBehaviour, IPortalTransient
 
         _telDiff = transform.position - entry.up * dis;
         _telDiff = ((_telDiff - entry.position).normalized) + entry.position - transform.position;
-        _telDiff = _telDiff.normalized * 2f;
+        _telDiff = -diff.normalized;
+        _tempLookT = entry;
     }
 }

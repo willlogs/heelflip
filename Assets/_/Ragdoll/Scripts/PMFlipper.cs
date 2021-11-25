@@ -12,19 +12,18 @@ namespace DB.HeelFlip
     {
         public UnityEvent OnJump;
         public BoolCondition isFeetAttached;
-        public Quaternion goalRotation;
         public LayerMask layerMask;
         public Vector3 jump;
 
         public void Rotate(Quaternion ftr, Quaternion ftr2)
         {
-            _angularVel = -Quaternion.AngleAxis(1, transform.right).eulerAngles.normalized * _angularVel.magnitude;
+            //_angularVel = -Quaternion.AngleAxis(1, transform.right).eulerAngles.normalized * _angularVel.magnitude;
             //goalRotation = ftr * goalRotation;
         }
 
         public void FeetAttached(Vector3 pivot)
         {
-            _resetingRotation = true;
+            //_resetingRotation = true;
             _grounded = true;
             _rotationPivot = pivot;
         }
@@ -40,7 +39,7 @@ namespace DB.HeelFlip
         [SerializeField] private bool _isClinched = false;
         [SerializeField] private Animator _animator;
         [SerializeField] private Vector3 _angularVel;
-        [SerializeField] private Transform _feetT;
+        [SerializeField] private Transform _feetT, _bodyT;
 
         private Vector3 _rotationPivot;
         bool _jumpCue = false, _jumping = false, _resetingRotation = false, _grounded;
@@ -48,7 +47,6 @@ namespace DB.HeelFlip
         private void Awake()
         {
             _rb.centerOfMass = Vector3.zero;
-            goalRotation = transform.rotation;
         }
 
         private void Update()
@@ -66,36 +64,12 @@ namespace DB.HeelFlip
             if (!isFeetAttached.value && _isClinched)
             {
                 _animator.SetBool("Spin", true);
-                _rb.angularVelocity = _angularVel;
+                //_rb.angularVelocity = _angularVel;
+                _bodyT.rotation = Quaternion.AngleAxis(10, _bodyT.right) * _bodyT.rotation;
             }
             else
             {
                 _animator.SetBool("Spin", false);
-            }
-
-            if (_resetingRotation)
-            {
-                Vector3 feetPos = _feetT.position;
-                Vector3 feetOffset = transform.position - _feetT.transform.position;
-
-                Vector3 before = transform.up;
-
-                transform.rotation = Quaternion.Slerp(
-                    transform.rotation,
-                    goalRotation,
-                    Time.deltaTime * 8f
-                );
-
-                Vector3 after = transform.up;
-
-                Quaternion ftr = Quaternion.FromToRotation(before, after);
-                feetOffset = ftr * feetOffset;
-                transform.position = feetPos + feetOffset;
-
-                if(Quaternion.Angle(goalRotation, transform.rotation) < 1f)
-                {
-                    _resetingRotation = false;
-                }
             }
         }
 
