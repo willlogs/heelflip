@@ -7,6 +7,11 @@ using UnityEngine;
 
 public class CameraScript : MonoBehaviour, IPortalTransient
 {
+    public void Freeze()
+    {
+        _follow = false;
+    }
+
     public bool UseThreshold {
         get
         {
@@ -48,7 +53,7 @@ public class CameraScript : MonoBehaviour, IPortalTransient
     [SerializeField] private Transform _targetTransform, _targetLookTransform, _tempLookT;
 
     private Vector3 _offset, _telDiff, _forw;
-    private bool _canTeleport = true, _gonnaTeleport;
+    private bool _canTeleport = true, _gonnaTeleport, _follow = true;
 
     private void Awake()
     {
@@ -65,11 +70,16 @@ public class CameraScript : MonoBehaviour, IPortalTransient
 
     private void FixedUpdate()
     {
+        if (!_follow)
+            return;
+
         Vector3 goalPos = _targetTransform.position;
         Vector3 forw = _targetLookTransform.position - transform.position;
+
         if (_gonnaTeleport)
         {
-            goalPos = transform.position + _telDiff * 6;
+            midway = Vector3.Lerp(midway, _tempLookT.position, Time.deltaTime * _lerpSpeed);
+            goalPos = midway;
             forw = _tempLookT.position - transform.position;
         }
 
@@ -82,14 +92,17 @@ public class CameraScript : MonoBehaviour, IPortalTransient
         transform.forward = Vector3.Lerp(transform.forward, forw, Time.deltaTime);
     }
 
+    Vector3 midway;
     private void BeforeTargetTeleport(Transform entry)
     {
         _gonnaTeleport = true;
 
         Vector3 diff = transform.position - entry.position;
-        float dis = Vector3.Dot(diff, entry.up);
+        float dis = Vector3.Dot(diff, entry.forward);
 
-        _telDiff = transform.position - entry.up * dis;
+        midway = entry.position + Vector3.Dot(entry.forward, transform.position - entry.position) * entry.forward;
+
+        _telDiff = transform.position - entry.forward * dis;
         _telDiff = ((_telDiff - entry.position).normalized) + entry.position - transform.position;
         _telDiff = -diff.normalized;
         _tempLookT = entry;

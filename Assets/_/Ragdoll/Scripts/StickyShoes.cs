@@ -16,23 +16,15 @@ namespace DB.HeelFlip.Ragdoll {
         {
             if (_canAttach && !other.isTrigger)
             {
-                BoxCollider bc = _leftRenderer.GetComponent<BoxCollider>();
-                _bottom = bc.bounds.center;
-                _bottom.y -= (bc.bounds.size / 2).y;
-
-                // raycast and replace _bottom to matching position
-
-                RaycastHit hit;
-                Physics.Raycast(
-                    new Ray(_leftRenderer.transform.position, Vector2.down),
-                    out hit,
-                    3f,
-                    _layerMask,
-                    QueryTriggerInteraction.Ignore
-                );
-                Vector3 pivot = hit.collider != null ? hit.point : _bottom;                
-
-                _rb.transform.position = pivot + _rb.transform.position - _bottom;
+                Vector3 pivot = transform.position;
+                if (_level > 1)
+                {
+                    pivot = _leftStack[_leftStack.Count - 1]._bottomT.position;
+                }
+                else
+                {
+                    pivot = _leftHeel._bottomT.position;
+                }
 
                 OnAttach?.Invoke(pivot);
                 _rb.angularVelocity = Vector3.zero;
@@ -56,28 +48,55 @@ namespace DB.HeelFlip.Ragdoll {
 
         public void LevelUp()
         {
-            if(_level < _shoeMeshes.Length - 1)
+            if(_level < 1)
             {
-                _level++;
-                SetShoeMesh();
+                _rightHeel.gameObject.SetActive(true);
+                _leftHeel.gameObject.SetActive(true);
             }
+            else
+            {
+                Transform rlp = _rightHeel._bottomT;
+                Transform llp = _leftHeel._bottomT;
+
+                if (_level > 1)
+                {
+                    llp = _leftStack[_leftStack.Count - 1]._bottomT;
+                    rlp = _rightStack[_rightStack.Count - 1]._bottomT;
+                }
+
+                HeelPart rhp = Instantiate(_rightHeel.gameObject).GetComponent<HeelPart>();
+                HeelPart lhp = Instantiate(_leftHeel.gameObject).GetComponent<HeelPart>();
+
+                CloneTransportFromTo(_rightHeel ,rhp);
+                CloneTransportFromTo(_leftHeel ,lhp);
+
+                _rightStack.Add(rhp);
+                _leftStack.Add(lhp);
+
+                rhp.transform.position = rlp.position;
+                lhp.transform.position = llp.position;
+            }
+            _level++;
+        }
+
+        private void CloneTransportFromTo(HeelPart from_, HeelPart to_)
+        {
+            to_.transform.parent = from_.transform.parent;
+            to_.transform.localScale = from_.transform.localScale;
+            to_.transform.rotation = from_.transform.rotation;
         }
 
         public void LevelDown()
         {
-            if(_level > 0)
-            {
-                _level--;
-                SetShoeMesh();
-            }
+
         }
 
         [SerializeField] private Rigidbody _rb;
         [SerializeField] private PuppetMaster _puppet;
         [SerializeField] private LayerMask _layerMask;
 
-        [SerializeField] private MeshFilter _leftRenderer, _rightRenderer;
-        [SerializeField] private Mesh[] _shoeMeshes;
+        [SerializeField] private HeelPart _leftHeel, _rightHeel;
+        [SerializeField] private List<HeelPart> _leftStack, _rightStack;
         [SerializeField] private int _level = 0;
 
         private bool _canAttach = true;
@@ -85,18 +104,15 @@ namespace DB.HeelFlip.Ragdoll {
 
         private void Start()
         {
-            SetShoeMesh();
-        }
-
-        private void SetShoeMesh()
-        {
-            SetFilter(_leftRenderer);
-            SetFilter(_rightRenderer);
+            if(_level == 0)
+            {
+                _rightHeel.gameObject.SetActive(false);
+                _leftHeel.gameObject.SetActive(false);
+            }
         }
 
         private void SetFilter(MeshFilter filter)
         {
-            filter.mesh = _shoeMeshes[_level];
             Destroy(filter.GetComponent<BoxCollider>());
             filter.gameObject.AddComponent<BoxCollider>().isTrigger = true;
         }

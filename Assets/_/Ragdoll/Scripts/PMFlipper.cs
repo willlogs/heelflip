@@ -1,3 +1,4 @@
+using DB.HeelFlip.Ragdoll;
 using DB.Utils;
 using RootMotion.Dynamics;
 using System;
@@ -14,6 +15,7 @@ namespace DB.HeelFlip
         public BoolCondition isFeetAttached;
         public LayerMask layerMask;
         public Vector3 jump;
+        public StickyShoes shoes;
 
         public void Rotate(Quaternion ftr, Quaternion ftr2)
         {
@@ -38,7 +40,7 @@ namespace DB.HeelFlip
         [SerializeField] private Rigidbody _rb;
         [SerializeField] private bool _isClinched = false;
         [SerializeField] private Animator _animator;
-        [SerializeField] private Vector3 _angularVel;
+        [SerializeField] private float _angularVel, _angularLimit, _angularAcceleration, _angularDamper;
         [SerializeField] private Transform _feetT, _bodyT;
 
         private Vector3 _rotationPivot;
@@ -64,13 +66,17 @@ namespace DB.HeelFlip
             if (!isFeetAttached.value && _isClinched)
             {
                 _animator.SetBool("Spin", true);
-                //_rb.angularVelocity = _angularVel;
-                _bodyT.rotation = Quaternion.AngleAxis(10, _bodyT.right) * _bodyT.rotation;
+                _angularVel += _angularAcceleration * Time.deltaTime;
+                _angularVel = Mathf.Clamp(_angularVel, 0, _angularLimit);
             }
             else
             {
+                _angularVel *= _angularDamper;
                 _animator.SetBool("Spin", false);
             }
+
+            if(!isFeetAttached.value)
+                _bodyT.rotation = Quaternion.AngleAxis(_angularVel, _bodyT.right) * _bodyT.rotation;
         }
 
         private void ToggleClinch()
