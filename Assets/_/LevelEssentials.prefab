@@ -1364,6 +1364,9 @@ MonoBehaviour:
   _angularDamper: 0.9
   _feetT: {fileID: 1454305257240269282}
   _bodyT: {fileID: 1454305257803151586}
+  _slideLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &1454305257210936678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2514,7 +2517,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _target: {fileID: 1454305257210936672}
-  _lerpSpeed: 5
+  _lerpSpeed: 7
   _offsetSize: 5
   _targetTransform: {fileID: 1454305256836134111}
   _targetLookTransform: {fileID: 1454305257210936684}

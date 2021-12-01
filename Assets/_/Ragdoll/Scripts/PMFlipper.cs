@@ -42,9 +42,10 @@ namespace DB.HeelFlip
         [SerializeField] private Animator _animator;
         [SerializeField] private float _angularVel, _angularLimit, _angularAcceleration, _angularDamper;
         [SerializeField] private Transform _feetT, _bodyT;
+        [SerializeField] private LayerMask _slideLayer;
 
         private Vector3 _rotationPivot;
-        bool _jumpCue = false, _jumping = false, _resetingRotation = false, _grounded;
+        bool _jumpCue = false, _jumping = false, _resetingRotation = false, _grounded, _sliding;
 
         private void Awake()
         {
@@ -63,7 +64,7 @@ namespace DB.HeelFlip
                 ToggleClinch();
             }
 
-            if (!isFeetAttached.value && _isClinched)
+            if (!isFeetAttached.value && _isClinched && !_sliding)
             {
                 _animator.SetBool("Spin", true);
                 _angularVel += _angularAcceleration * Time.deltaTime;
@@ -75,8 +76,27 @@ namespace DB.HeelFlip
                 _animator.SetBool("Spin", false);
             }
 
-            if(!isFeetAttached.value)
+            if(!isFeetAttached.value && !_sliding)
                 _bodyT.rotation = Quaternion.AngleAxis(_angularVel, _bodyT.right) * _bodyT.rotation;
+
+            if (_sliding)
+            {
+                _bodyT.rotation = Quaternion.Slerp(
+                    _bodyT.rotation,
+                    Quaternion.LookRotation(transform.forward, transform.up),
+                    Time.deltaTime * 10
+                );
+                
+                if(slideNormal.magnitude > 0)
+                {
+                    transform.rotation = Quaternion.Slerp(
+                        transform.rotation,
+                        Quaternion.LookRotation(-slideNormal),
+                        Time.deltaTime * 10
+                    );
+                    _rb.velocity = -transform.up * 5;
+                }
+            }
         }
 
         private void ToggleClinch()
@@ -87,7 +107,7 @@ namespace DB.HeelFlip
                 _animator.SetBool("Clinch", false);
                 _jumpCue = false;
 
-                if (isFeetAttached.value && !_resetingRotation)
+                if (isFeetAttached.value && !_resetingRotation && !_sliding)
                 {
                     OnJump?.Invoke();
                     _jumping = true;
@@ -99,6 +119,34 @@ namespace DB.HeelFlip
                 _isClinched = true;
                 _jumpCue = true;
                 _animator.SetBool("Clinch", true);
+            }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            int layerTest = _slideLayer.value & (1 << collision.gameObject.layer);
+            if (layerTest > 0)
+            {
+                _sliding = true;
+            }
+        }
+
+        Vector3 slideNormal;
+        private void OnCollisionStay(Collision collision)
+        {
+            int layerTest = _slideLayer.value & (1 << collision.gameObject.layer);
+            if (layerTest > 0)
+            {
+                slideNormal = collision.GetContact(0).normal;
+            }
+        }
+
+        private void OnCollisionExit(Collision collision)
+        {
+            int layerTest = _slideLayer.value & (1 << collision.gameObject.layer);
+            if (layerTest > 0)
+            {
+                _sliding = false;
             }
         }
     }
