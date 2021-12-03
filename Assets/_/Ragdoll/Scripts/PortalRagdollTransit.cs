@@ -29,9 +29,19 @@ namespace DB.HeelFlip
             }
         }
 
+        bool _wentIn = true;
+        public void BeforeTel(Transform entry)
+        {
+            if (_wentIn)
+            {
+                _wentIn = false;
+                BeforeTeleport?.Invoke(entry);
+            }
+        }
+
         public void Teleport(Vector3 position, Quaternion rotation, Transform entry, Transform exit)
         {
-            BeforeTeleport?.Invoke(entry);
+            //BeforeTeleport?.Invoke(entry);
             Quaternion before = transform.rotation;
             Vector3 up = transform.up;
 
@@ -54,6 +64,7 @@ namespace DB.HeelFlip
             _bodyT.parent = null;
             _bodyT.rotation = bodyTR;
             _bodyT.transform.parent = transform;
+            _wentIn = true;
         }
 
         private void ToRelativeCoord(Vector3 input, out float mag, out Vector3 coord)
