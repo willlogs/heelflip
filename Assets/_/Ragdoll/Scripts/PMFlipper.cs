@@ -35,7 +35,7 @@ namespace DB.HeelFlip
 
         public void FeetAttached(Vector3 pivot)
         {
-            //_resetingRotation = true;
+            _resetingRotation = true;
             _grounded = true;
             _rotationPivot = pivot;
         }
@@ -119,20 +119,32 @@ namespace DB.HeelFlip
             {
                 _distance += Time.fixedDeltaTime * 20;
                 _positioner.SetDistance(_distance);
+
                 SplineSample _sample = _positioner.spline.Project(transform.position);
+                Quaternion targetBodyRotation1 = Quaternion.LookRotation(-_positioner.transform.up, -_positioner.transform.forward);
+                Quaternion targetBodyRotation2 = Quaternion.LookRotation(_positioner.transform.up, _positioner.transform.forward);
+                
+                float angle1 = Quaternion.Angle(_bodyT.rotation, targetBodyRotation1);
+                float angle2 = Quaternion.Angle(_bodyT.rotation, targetBodyRotation2);
+
+                Quaternion targetBodyRotation = angle1 < angle2 ? targetBodyRotation1 : targetBodyRotation2;
+                Vector3 bodyOffset = angle1 < angle2 ? -_bodyT.forward : _bodyT.forward;
+
                 _bodyT.rotation = Quaternion.Lerp(
                     _bodyT.rotation,
-                    Quaternion.LookRotation(_positioner.transform.up, _positioner.transform.forward),
+                    targetBodyRotation,
                     Time.fixedDeltaTime * 5
                 );
+                    
                 transform.position = Vector3.Lerp(
                     transform.position,
-                    _positioner.transform.position + _bodyT.forward / 2,
-                    Time.fixedDeltaTime * 20
+                    _positioner.transform.position + bodyOffset / 2,
+                    Time.fixedDeltaTime * 5
                 );
 
                 if (_sample.percent >= 0.98f)
                 {
+                    Vector3 shootDir = angle1 > angle2 ? _bodyT.up : -_bodyT.up;
                     _canSlide = false;
                     TimeManager.Instance.DoWithDelay(0.1f, () =>
                     {
@@ -140,8 +152,17 @@ namespace DB.HeelFlip
                         _collider.enabled = true;
                     });
                     DeactivateSlide();
-                    _rb.velocity = _bodyT.up * 20f;
+                    _rb.velocity = shootDir * 20f;
                 }
+            }
+
+            if (_resetingRotation)
+            {
+                _bodyT.rotation = Quaternion.Slerp(
+                    _bodyT.rotation,
+                    Quaternion.identity,
+                    Time.deltaTime * 5
+                );
             }
         }
 

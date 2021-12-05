@@ -86,15 +86,20 @@ public class CameraScript : MonoBehaviour, IPortalTransient
 
     private void FixedUpdate()
     {
+        if (_realOffsetMode)
+        {
+            _brain.ManualUpdate();
+            return;
+        }
+
         if (!_follow)
             return;
+
         float _tempLerpSpeed = _lerpSpeed;
         Vector3 goalPos = _targetTransform.position;
         Vector3 forw = _targetLookTransform.position - transform.position;
         if (_offsetMode && !_realOffsetMode && !_gonnaTeleport)
         {
-            _mainVCam.UpdateCameraState(Vector3.up, Time.fixedDeltaTime);
-            _mainVCam.InternalUpdateCameraState(Vector3.up, Time.fixedDeltaTime);
             transform.position = Vector3.MoveTowards(transform.position, _mainVCam.transform.position, Time.fixedDeltaTime * 50);
             transform.rotation = Quaternion.Slerp(transform.rotation, _mainVCam.transform.rotation, Time.fixedDeltaTime * 5);
             return;
