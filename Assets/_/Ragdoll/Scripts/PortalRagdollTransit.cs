@@ -10,7 +10,7 @@ namespace DB.HeelFlip
     [RequireComponent(typeof(Rigidbody))]
     public class PortalRagdollTransit : MonoBehaviour, IPortalTransient
     {
-        public event Action<Transform> BeforeTeleport;
+        public event Action<Transform> BeforeTeleport, AfterTeleport;
         Rigidbody rb;
 
         public bool UseThreshold
@@ -69,6 +69,7 @@ namespace DB.HeelFlip
             _wentIn = true;
             _puppet.Teleport(transform.position, transform.rotation, true);
             _puppet.mode = def;
+            AfterTeleport?.Invoke(exit);
         }
 
         private void ToRelativeCoord(Vector3 input, out float mag, out Vector3 coord)

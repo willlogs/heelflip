@@ -53,12 +53,27 @@ namespace DB.HeelFlip
             _rb.isKinematic = true;
         }
 
+        public UnityEvent<Collision> OnDidntDie;
+        public void CheckAngle(Collision c)
+        {
+            float dot = Vector3.Dot(_bodyT.up, c.GetContact(0).normal);
+            print(dot);
+            if (dot < 0.9f)
+            {
+                DieQuestionMark();
+            }
+            else
+            {
+                OnDidntDie?.Invoke(c);
+            }
+        }
+
         [SerializeField] private PuppetMaster _puppet;
         [SerializeField] private Rigidbody _rb;
         [SerializeField] private bool _isClinched = false;
         [SerializeField] private Animator _animator;
         [SerializeField] private float _angularVel, _angularLimit, _angularAcceleration, _angularDamper;
-        [SerializeField] private Transform _feetT, _bodyT;
+        [SerializeField] public Transform _feetT, _bodyT;
         [SerializeField] private LayerMask _slideLayer;
         [SerializeField] private SplinePositioner _positioner;
         [SerializeField] private Collider _collider;

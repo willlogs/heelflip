@@ -36,6 +36,31 @@ namespace DB.HeelFlip.Ragdoll {
             }
         }
 
+        public void OnCollisionEC(Collision c)
+        {
+            Collider other = c.collider;
+            if (_canAttach && !other.isTrigger)
+            {
+                Vector3 pivot = transform.position;
+                if (_level > 1)
+                {
+                    pivot = _leftStack[_leftStack.Count - 1]._bottomT.position;
+                }
+                else
+                {
+                    pivot = _leftHeel._bottomT.position;
+                }
+
+                OnAttach?.Invoke(pivot);
+                _rb.angularVelocity = Vector3.zero;
+                _rb.velocity = Vector3.zero;
+                _rb.isKinematic = true;
+                isAttachedBool.value = true;
+
+                _canAttach = false;
+            }
+        }
+
         public void Release()
         {
             _rb.isKinematic = false;

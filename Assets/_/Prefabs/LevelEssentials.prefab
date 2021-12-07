@@ -118,8 +118,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1510584802}
-  m_LocalRotation: {x: 0.2991707, y: 0.21477383, z: -0.06930441, w: 0.92712784}
-  m_LocalPosition: {x: -35.760002, y: 74.229996, z: 0.01999855}
+  m_LocalRotation: {x: 0.29917076, y: 0.21477386, z: -0.06930442, w: 0.92712784}
+  m_LocalPosition: {x: -35.760002, y: 74.229996, z: 0.020000458}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1459322687}
@@ -343,8 +343,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 405175249127440293}
-  m_LocalRotation: {x: -0, y: 0.70710677, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -314.1577, y: -1601.767, z: -405.20004}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -314.15784, y: -1601.767, z: -405.20004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2236969259503167318}
@@ -611,6 +611,7 @@ GameObject:
   - component: {fileID: 5670246051194742347}
   - component: {fileID: 1334809123941737932}
   - component: {fileID: 3680255858162350435}
+  - component: {fileID: 8460332895418816821}
   m_Layer: 8
   m_Name: Flower
   m_TagString: Untagged
@@ -803,6 +804,21 @@ MonoBehaviour:
     m_Bits: 1
   jump: {x: 3, y: 7, z: 0}
   shoes: {fileID: 373685178333071442}
+  OnDidntDie:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 373685178333071442}
+        m_TargetAssemblyTypeName: DB.HeelFlip.Ragdoll.StickyShoes, Assembly-CSharp
+        m_MethodName: OnCollisionEC
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _puppet: {fileID: 2515263989602066516}
   _rb: {fileID: 2108743020020353907}
   _isClinched: 0
@@ -832,7 +848,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layerMask:
     serializedVersion: 2
-    m_Bits: 129
+    m_Bits: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1334809123941737932}
+        m_TargetAssemblyTypeName: DB.HeelFlip.PMFlipper, Assembly-CSharp
+        m_MethodName: CheckAngle
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &8460332895418816821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965745814287418616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b93359086113274c986e1942fa68bf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 128
   OnEnter:
     m_PersistentCalls:
       m_Calls:
@@ -1467,7 +1516,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -5.9200096, y: 0.0000092214905, z: -0.000040548814}
+  m_ConnectedAnchor: {x: -5.920012, y: 0.0000075688586, z: -0.000040787236}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 0, z: 1}
   m_XMotion: 0
@@ -1627,7 +1676,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: -0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.00000047683707, y: 0.0000008805457, z: -2.0455172}
+  m_ConnectedAnchor: {x: -0.00000047683733, y: 0.00000043351085, z: -2.0455174}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -1788,7 +1837,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: -0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -8.527986, y: 0.36598596, z: 0.0000011324883}
+  m_ConnectedAnchor: {x: -8.527986, y: 0.36598596, z: 0.0000010728836}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -1948,7 +1997,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: -0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.1621901, y: 0.17357793, z: 3.2629023}
+  m_ConnectedAnchor: {x: -0.1621901, y: 0.17357793, z: 3.2629025}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -2665,7 +2714,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: -0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -10.574814, y: -0.00001861117, z: 0.00004340707}
+  m_ConnectedAnchor: {x: -10.574814, y: -0.00001861109, z: 0.000043168653}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -2824,7 +2873,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: -1, z: -0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -5.919992, y: 0.000004469883, z: -0.00003067087}
+  m_ConnectedAnchor: {x: -5.9199934, y: 0.0000065998183, z: -0.000029776802}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 0, z: -1}
   m_XMotion: 0
@@ -2984,7 +3033,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: -0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -4.809092, y: -0.000006198882, z: -0.0000039935103}
+  m_ConnectedAnchor: {x: -4.809092, y: -0.000004768371, z: -0.0000033974638}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -3317,7 +3366,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: -0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -10.574457, y: 0.000006013883, z: -0.000023841862}
+  m_ConnectedAnchor: {x: -10.574457, y: 0.0000060139705, z: -0.000023603443}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -3638,7 +3687,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: -0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.00000047683707, y: -0.0000008805457, z: 2.0455172}
+  m_ConnectedAnchor: {x: 0.00000047683733, y: -0.00000043351085, z: 2.0455174}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -3798,7 +3847,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: -0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.61523557, y: 0.1968207, z: -3.0966573}
+  m_ConnectedAnchor: {x: -0.61523557, y: 0.1968207, z: -3.0966575}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -3958,7 +4007,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: -0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -4.8082705, y: 0.000007629396, z: 0.000014424326}
+  m_ConnectedAnchor: {x: -4.8082714, y: 0.000007152559, z: 0.000014424326}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -4117,7 +4166,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: -0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -3.962606, y: -0.5135613, z: -0.0000070920037}
+  m_ConnectedAnchor: {x: -3.962606, y: -0.5135613, z: -0.0000070622013}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -4276,7 +4325,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: -0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -10.327741, y: -0.000016131844, z: -0.000014426009}
+  m_ConnectedAnchor: {x: -10.327741, y: -0.000016131844, z: -0.0000143068}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -4435,7 +4484,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -0, y: -0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -10.327604, y: -0.000007937152, z: -0.0000119631195}
+  m_ConnectedAnchor: {x: -10.327604, y: -0.000007937152, z: -0.000012201538}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -4958,9 +5007,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5588412979819091865}
-  - component: {fileID: 2845711831182484431}
   - component: {fileID: 1319244088}
-  m_Layer: 12
+  m_Layer: 8
   m_Name: Heels0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4983,42 +5031,6 @@ Transform:
   m_Father: {fileID: 4010377129507276505}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2845711831182484431
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2351975909120394859}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58a8d117ac6fd47438ffe112449c030e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 1
-  OnEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 373685178333071442}
-        m_TargetAssemblyTypeName: DB.HeelFlip.Ragdoll.StickyShoes, Assembly-CSharp
-        m_MethodName: OnCollisionE
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnExit:
-    m_PersistentCalls:
-      m_Calls: []
-  OnStay:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!65 &1319244088
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5027,7 +5039,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2351975909120394859}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.021280931, y: 0.052585945, z: 0.037701417}
@@ -5072,7 +5084,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2475450969908684425}
-  m_Layer: 12
+  m_Layer: 8
   m_Name: HeelLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5260,7 +5272,7 @@ GameObject:
   - component: {fileID: 4874088436544344624}
   - component: {fileID: 8227362704166861834}
   - component: {fileID: 2198617473256693251}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: sizetest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5658,7 +5670,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4380578308688043681}
-  m_LocalRotation: {x: -0, y: -0.70710677, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -32.47, y: 68.84, z: 6.74}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -5667,7 +5679,7 @@ Transform:
   - {fileID: 2236969259503167318}
   m_Father: {fileID: 6791627182312363256}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &4444769441766008610
 GameObject:
   m_ObjectHideFlags: 0
@@ -6021,7 +6033,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8701966948347475290}
-  m_Layer: 12
+  m_Layer: 8
   m_Name: Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6376,7 +6388,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1120754292383878277}
-  m_Layer: 12
+  m_Layer: 8
   m_Name: Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6681,9 +6693,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5111734586716194879}
-  - component: {fileID: 6614331514812928247}
   - component: {fileID: 967741271}
-  m_Layer: 12
+  m_Layer: 8
   m_Name: Heels0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6706,42 +6717,6 @@ Transform:
   m_Father: {fileID: 2475450969908684425}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6614331514812928247
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7059151778294568663}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58a8d117ac6fd47438ffe112449c030e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 1
-  OnEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 373685178333071442}
-        m_TargetAssemblyTypeName: DB.HeelFlip.Ragdoll.StickyShoes, Assembly-CSharp
-        m_MethodName: OnCollisionE
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnExit:
-    m_PersistentCalls:
-      m_Calls: []
-  OnStay:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!65 &967741271
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6750,7 +6725,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7059151778294568663}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.021280931, y: 0.052585945, z: 0.037701417}
@@ -7211,11 +7186,9 @@ GameObject:
   - component: {fileID: 6694165471064647454}
   - component: {fileID: 5779613748640787132}
   - component: {fileID: 5015784724882554011}
-  - component: {fileID: 1637952333845599193}
-  - component: {fileID: 3588680514213687279}
   - component: {fileID: 3567273364383445131}
   - component: {fileID: 800808136}
-  m_Layer: 12
+  m_Layer: 8
   m_Name: heelpref
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7286,90 +7259,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1637952333845599193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7740620929739525426}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58a8d117ac6fd47438ffe112449c030e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 128
-  OnEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: DB.Utils.RagdollManager, Assembly-CSharp
-        m_MethodName: Activate
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 1
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1454305257673896620}
-        m_TargetAssemblyTypeName: CameraScript, Assembly-CSharp
-        m_MethodName: Freeze
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnExit:
-    m_PersistentCalls:
-      m_Calls: []
-  OnStay:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &3588680514213687279
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7740620929739525426}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58a8d117ac6fd47438ffe112449c030e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 1
-  OnEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 373685178333071442}
-        m_TargetAssemblyTypeName: DB.HeelFlip.Ragdoll.StickyShoes, Assembly-CSharp
-        m_MethodName: OnCollisionE
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnExit:
-    m_PersistentCalls:
-      m_Calls: []
-  OnStay:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &3567273364383445131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7391,7 +7280,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7740620929739525426}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.007554905, y: 0.046848424, z: 0.050544735}
@@ -7768,7 +7657,7 @@ GameObject:
   - component: {fileID: 5118640877304717239}
   - component: {fileID: 1793609597304621004}
   - component: {fileID: 1049981018064886126}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: sizetest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8054,11 +7943,9 @@ GameObject:
   - component: {fileID: 8139027658644891537}
   - component: {fileID: 4600971905506994414}
   - component: {fileID: 6647853655305320603}
-  - component: {fileID: 798453382161770506}
   - component: {fileID: 3943371559112837222}
-  - component: {fileID: 7502612065244996253}
   - component: {fileID: 688326939}
-  m_Layer: 12
+  m_Layer: 8
   m_Name: heelpref
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8129,54 +8016,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &798453382161770506
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8865265570425881627}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58a8d117ac6fd47438ffe112449c030e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 128
-  OnEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: DB.Utils.RagdollManager, Assembly-CSharp
-        m_MethodName: Activate
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 1
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1454305257673896620}
-        m_TargetAssemblyTypeName: CameraScript, Assembly-CSharp
-        m_MethodName: Freeze
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnExit:
-    m_PersistentCalls:
-      m_Calls: []
-  OnStay:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &3943371559112837222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8190,42 +8029,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bottomT: {fileID: 8701966948347475290}
---- !u!114 &7502612065244996253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8865265570425881627}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58a8d117ac6fd47438ffe112449c030e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 1
-  OnEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 373685178333071442}
-        m_TargetAssemblyTypeName: DB.HeelFlip.Ragdoll.StickyShoes, Assembly-CSharp
-        m_MethodName: OnCollisionE
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnExit:
-    m_PersistentCalls:
-      m_Calls: []
-  OnStay:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!65 &688326939
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8234,7 +8037,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8865265570425881627}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.007554902, y: 0.04684839, z: 0.050544694}
@@ -8775,14 +8578,14 @@ PrefabInstance:
     - {fileID: -5754084199372789682, guid: 28a3a15d88b077841bde9d756e19fdf5, type: 3}
     - {fileID: -7511558181221131132, guid: 28a3a15d88b077841bde9d756e19fdf5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 28a3a15d88b077841bde9d756e19fdf5, type: 3}
---- !u!4 &1415260101186652061 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 28a3a15d88b077841bde9d756e19fdf5, type: 3}
-  m_PrefabInstance: {fileID: 1454305257608634486}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1796887034597727527 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 28a3a15d88b077841bde9d756e19fdf5, type: 3}
+  m_PrefabInstance: {fileID: 1454305257608634486}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1415260101186652061 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 28a3a15d88b077841bde9d756e19fdf5, type: 3}
   m_PrefabInstance: {fileID: 1454305257608634486}
   m_PrefabAsset: {fileID: 0}
 --- !u!65 &1454305258414944927
@@ -8877,14 +8680,14 @@ PrefabInstance:
     - {fileID: -5754084199372789682, guid: 28a3a15d88b077841bde9d756e19fdf5, type: 3}
     - {fileID: -7511558181221131132, guid: 28a3a15d88b077841bde9d756e19fdf5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 28a3a15d88b077841bde9d756e19fdf5, type: 3}
---- !u!1 &6304593899327643292 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 28a3a15d88b077841bde9d756e19fdf5, type: 3}
-  m_PrefabInstance: {fileID: 6611006550771885005}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6644421416361165862 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 28a3a15d88b077841bde9d756e19fdf5, type: 3}
+  m_PrefabInstance: {fileID: 6611006550771885005}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6304593899327643292 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 28a3a15d88b077841bde9d756e19fdf5, type: 3}
   m_PrefabInstance: {fileID: 6611006550771885005}
   m_PrefabAsset: {fileID: 0}
 --- !u!65 &5402240547046566762

@@ -73,8 +73,15 @@ public class CameraScript : MonoBehaviour, IPortalTransient
     private void Awake()
     {
         _target.BeforeTeleport += BeforeTargetTeleport;
+        _target.AfterTeleport += AfterTeleport;
         SetOffset();
         Application.targetFrameRate = 60;
+    }
+
+    bool didTeleport = false;
+    private void AfterTeleport(Transform exit)
+    {
+        didTeleport = true;
     }
 
     private void SetOffset()
@@ -130,20 +137,35 @@ public class CameraScript : MonoBehaviour, IPortalTransient
         _mainVCam.UpdateCameraState(Vector3.up, Time.deltaTime);
         if (_gonnaTeleport)
         {
-            distance += Time.deltaTime * _transitLerpSpeed;
+            if (didTeleport)
+            {
+                distance += Time.deltaTime * _lerpSpeed;
+            }
+            else
+            {
+                float newMag = (_flowerRB.transform.position - entry.position).magnitude;
+                distance = (mag - newMag) / mag;
+                lastDistance = distance - lastDistance;
+                lastDistance = distance;
+            }
         }
     }
 
     Vector3 midway, _curMidway;
-    float distance;
+    float distance, mag, lastDistance, lastDiff = 0;
+    Transform entry;
     private void BeforeTargetTeleport(Transform entry)
     {
+        this.entry = entry;
         _gonnaTeleport = true;
-        _transitLerpSpeed = (transform.position - entry.position).magnitude * _transitLerpFactor / _flowerRB.velocity.magnitude;
+        didTeleport = false;
+        float dot = Mathf.Abs(Vector3.Dot(_flowerRB.velocity, entry.forward));
+        _transitLerpSpeed = dot * _transitLerpFactor * _flowerRB.velocity.magnitude;
+        mag = (_flowerRB.transform.position - entry.position).magnitude;
 
         Vector3 diff = transform.position - entry.position;
         float dis = Vector3.Dot(diff, entry.forward);
-        distance = 0;
+        lastDistance = distance = 0;
 
         _curMidway = midway = entry.position + Vector3.Dot(entry.forward, transform.position - entry.position) * entry.forward;
 
