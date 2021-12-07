@@ -44,6 +44,8 @@ namespace DB.HeelFlip
             //BeforeTeleport?.Invoke(entry);
             Quaternion before = transform.rotation;
             Vector3 up = transform.up;
+            PuppetMaster.Mode def = _puppet.mode;
+            _puppet.mode = PuppetMaster.Mode.Kinematic;
 
             // x is for right, y is for up, z is for forward
             float velMag;
@@ -65,6 +67,8 @@ namespace DB.HeelFlip
             _bodyT.rotation = bodyTR;
             _bodyT.transform.parent = transform;
             _wentIn = true;
+            _puppet.Teleport(transform.position, transform.rotation, true);
+            _puppet.mode = def;
         }
 
         private void ToRelativeCoord(Vector3 input, out float mag, out Vector3 coord)
@@ -80,6 +84,7 @@ namespace DB.HeelFlip
 
         [SerializeField] private PMFlipper _flipper;
         [SerializeField] private Transform _camTarget, _bodyT, _pelvisT;
+        [SerializeField] private PuppetMaster _puppet;
 
         private void Awake()
         {

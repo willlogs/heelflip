@@ -11,7 +11,6 @@ public class HeelUpgrade : MonoBehaviour
         if (flipper != null)
         {
             flipper.shoes.LevelUp();
-            Destroy(gameObject);
         }
     }
 }

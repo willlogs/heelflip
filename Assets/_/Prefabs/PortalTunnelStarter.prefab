@@ -1249,10 +1249,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6556191874846630495}
   - component: {fileID: 6585858733149446823}
-  - component: {fileID: 576800609}
-  - component: {fileID: 576800610}
-  - component: {fileID: 576800607}
-  - component: {fileID: 576800608}
   m_Layer: 0
   m_Name: Portal 1
   m_TagString: Untagged
@@ -1296,84 +1292,6 @@ MonoBehaviour:
   portalViewResolution: 1024
   portalRoot1: {fileID: 6556191874846630495}
   portalRoot2: {fileID: 6556116563839072827}
---- !u!54 &576800609
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6554400544458128819}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!65 &576800610
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6554400544458128819}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 3.6712441, y: 6.9961257, z: 5.37565}
-  m_Center: {x: -2.001974e-14, y: -0.14744705, z: 6.44417}
---- !u!114 &576800607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6554400544458128819}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3eff9edeaabed941a17baf2a8833ddf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _entryPlane: {fileID: 6556399759978843497}
---- !u!114 &576800608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6554400544458128819}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58a8d117ac6fd47438ffe112449c030e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 256
-  OnEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 576800607}
-        m_TargetAssemblyTypeName: DB.HeelFlip.CameraTrigger, Assembly-CSharp
-        m_MethodName: ActivateCamTransition
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnExit:
-    m_PersistentCalls:
-      m_Calls: []
-  OnStay:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &6554467095747423295
 GameObject:
   m_ObjectHideFlags: 0
@@ -1531,6 +1449,8 @@ GameObject:
   - component: {fileID: 6548858325990604413}
   - component: {fileID: 6587450503367561935}
   - component: {fileID: 6490845199262516703}
+  - component: {fileID: 4084175750906689967}
+  - component: {fileID: 7771027817242929587}
   m_Layer: 0
   m_Name: Portal 1 Transit
   m_TagString: Untagged
@@ -1581,8 +1501,57 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5, y: 5, z: 2.5}
-  m_Center: {x: 0, y: 0, z: 1.25}
+  m_Size: {x: 5, y: 5, z: 10.090912}
+  m_Center: {x: -1.6943692e-13, y: -0.000010448947, z: 5.0454397}
+--- !u!114 &4084175750906689967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6554684229335777323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3eff9edeaabed941a17baf2a8833ddf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _entryPlane: {fileID: 6556399759978843497}
+--- !u!114 &7771027817242929587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6554684229335777323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a8d117ac6fd47438ffe112449c030e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4084175750906689967}
+        m_TargetAssemblyTypeName: DB.HeelFlip.CameraTrigger, Assembly-CSharp
+        m_MethodName: ActivateCamTransition
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6554779760286860441
 GameObject:
   m_ObjectHideFlags: 0

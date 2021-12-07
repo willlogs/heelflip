@@ -92,9 +92,6 @@ public class CameraScript : MonoBehaviour, IPortalTransient
             return;
         }
 
-        if (!_follow)
-            return;
-
         float _tempLerpSpeed = _lerpSpeed;
         Vector3 goalPos = _targetTransform.position;
         Vector3 forw = _targetLookTransform.position - transform.position;
@@ -112,11 +109,18 @@ public class CameraScript : MonoBehaviour, IPortalTransient
             forw = _tempLookT.position - transform.position;
         }
 
-        transform.position = Vector3.Lerp(
-            transform.position,
-            goalPos,
-            Time.fixedDeltaTime * _tempLerpSpeed
-        );
+        if (_follow || _gonnaTeleport)
+        {
+            transform.position = Vector3.Lerp(
+                transform.position,
+                goalPos,
+                Time.fixedDeltaTime * _tempLerpSpeed
+            );
+        }
+        else if(!_gonnaTeleport)
+        {
+            forw = _targetLookTransform.position - transform.position;
+        }
 
         transform.forward = Vector3.Lerp(transform.forward, forw, Time.fixedDeltaTime);
     }

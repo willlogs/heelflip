@@ -24,6 +24,12 @@ namespace DB.HeelFlip
             if (!isFeetAttached.value)
             {
                 OnDeath?.Invoke();
+                _puppet.mode = PuppetMaster.Mode.Active;
+                /*TimeManager.Instance.AddLayer(0);
+                TimeManager.Instance.DoWithDelay(1, () =>
+                {
+                    TimeManager.Instance.GoNormal();
+                });*/
             }
         }
 
@@ -38,6 +44,7 @@ namespace DB.HeelFlip
             _resetingRotation = true;
             _grounded = true;
             _rotationPivot = pivot;
+            _puppet.mode = PuppetMaster.Mode.Active;
         }
 
         public void Die()
@@ -63,6 +70,7 @@ namespace DB.HeelFlip
         private void Awake()
         {
             _rb.centerOfMass = Vector3.zero;
+            _puppet.mode = PuppetMaster.Mode.Kinematic;
         }
 
         private void Update()
@@ -75,15 +83,12 @@ namespace DB.HeelFlip
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 ToggleClinch();
-            }            
-        }
+            }
 
-        private void FixedUpdate()
-        {
             if (!isFeetAttached.value && _isClinched && !_sliding)
             {
                 _animator.SetBool("Spin", true);
-                _angularVel += _angularAcceleration * Time.fixedDeltaTime;
+                _angularVel += _angularAcceleration * Time.deltaTime;
                 _angularVel = Mathf.Clamp(_angularVel, 0, _angularLimit);
             }
             else
@@ -117,7 +122,7 @@ namespace DB.HeelFlip
 
             if (_sliding)
             {
-                _distance += Time.fixedDeltaTime * 20;
+                _distance += Time.deltaTime * 20;
                 _positioner.SetDistance(_distance);
 
                 SplineSample _sample = _positioner.spline.Project(transform.position);
@@ -133,14 +138,15 @@ namespace DB.HeelFlip
                 _bodyT.rotation = Quaternion.Lerp(
                     _bodyT.rotation,
                     targetBodyRotation,
-                    Time.fixedDeltaTime * 5
+                    Time.deltaTime * 5
                 );
-                    
-                transform.position = Vector3.Lerp(
-                    transform.position,
-                    _positioner.transform.position + bodyOffset / 2,
-                    Time.fixedDeltaTime * 5
-                );
+
+                if((transform.position - _positioner.transform.position).magnitude < 5)
+                    transform.position = Vector3.Lerp(
+                        transform.position,
+                        _positioner.transform.position + bodyOffset * 0.8f,
+                        Time.deltaTime * 10
+                    );
 
                 if (_sample.percent >= 0.98f)
                 {
@@ -160,9 +166,14 @@ namespace DB.HeelFlip
             {
                 _bodyT.rotation = Quaternion.Slerp(
                     _bodyT.rotation,
-                    Quaternion.identity,
+                    transform.rotation,
                     Time.deltaTime * 5
                 );
+                float angle = Quaternion.Angle(_bodyT.rotation, transform.rotation);
+                if(angle <= 0.1)
+                {
+                    _resetingRotation = false;
+                }
             }
         }
 
@@ -176,6 +187,7 @@ namespace DB.HeelFlip
 
                 if (isFeetAttached.value && !_resetingRotation && !_sliding)
                 {
+                    _puppet.mode = PuppetMaster.Mode.Kinematic;
                     OnJump?.Invoke();
                     _jumping = true;
                     _rb.velocity = jump.y * transform.up + jump.x * -transform.forward;
@@ -199,16 +211,21 @@ namespace DB.HeelFlip
 
                 if (!_sliding && _canSlide)
                 {
-                    _sliding = true;
-                    _collider.enabled = false;
                     _rb.isKinematic = true;
+                    _rb.useGravity = false;
+                    //_collider.enabled = false;
                     OnSlide?.Invoke();
                     _beforeSlideRotation = transform.rotation;
                     _positioner.transform.parent = null;
                     SplineComputer spline = collision.gameObject.GetComponent<SplineComputer>();
-                    _positioner.transform.position = spline.Project(transform.position).position;
+                    SplineSample sample = spline.Project(transform.position);
+                    _distance = (float)sample.percent * spline.CalculateLength();
                     _positioner.spline = spline;
-                    _distance = 0;
+                    _positioner.transform.position = sample.position;
+                    _positioner.SetDistance(_distance);
+
+                    _puppet.mode = PuppetMaster.Mode.Active;
+                    _sliding = true;
                 }
             }
         }
@@ -235,8 +252,11 @@ namespace DB.HeelFlip
 
         private void DeactivateSlide()
         {
+            _collider.enabled = false;
             OnStopSlide?.Invoke();
             _sliding = false;
+            _puppet.mode = PuppetMaster.Mode.Kinematic;
+            _rb.useGravity = true;
             _rb.isKinematic = false;
         }
     }
