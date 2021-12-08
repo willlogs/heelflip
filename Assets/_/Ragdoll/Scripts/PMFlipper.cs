@@ -53,6 +53,16 @@ namespace DB.HeelFlip
             _rb.isKinematic = true;
         }
 
+        public void SetStruggleTrue()
+        {
+            _animator.SetBool("Struggle", true);
+        }
+
+        public void SetStruggleFalse()
+        {
+            _animator.SetBool("Struggle", false);
+        }
+
         public UnityEvent<Collision> OnDidntDie;
         public void CheckAngle(Collision c)
         {
@@ -64,6 +74,7 @@ namespace DB.HeelFlip
             }
             else
             {
+                _animator.SetBool("Struggle", true);
                 OnDidntDie?.Invoke(c);
             }
         }

@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using DG.Tweening;
 
 public class CameraScript : MonoBehaviour, IPortalTransient
 {
@@ -33,6 +34,7 @@ public class CameraScript : MonoBehaviour, IPortalTransient
         if (!_offsetMode)
         {
             _offsetMode = true;
+            _realOffsetMode = false;
         }
     }
 
@@ -104,16 +106,24 @@ public class CameraScript : MonoBehaviour, IPortalTransient
         Vector3 forw = _targetLookTransform.position - transform.position;
         if (_offsetMode && !_realOffsetMode && !_gonnaTeleport)
         {
-            transform.position = Vector3.MoveTowards(transform.position, _mainVCam.transform.position, Time.fixedDeltaTime * 50);
-            transform.rotation = Quaternion.Slerp(transform.rotation, _mainVCam.transform.rotation, Time.fixedDeltaTime * 5);
+            transform.position = Vector3.MoveTowards(transform.position, _mainVCam.transform.position, Time.fixedDeltaTime * 18);
+            //transform.rotation = Quaternion.Slerp(transform.rotation, _mainVCam.transform.rotation, Time.fixedDeltaTime * 5);
+            forw = _targetLookTransform.position - transform.position;
+            transform.forward = Vector3.Lerp(transform.forward, forw, Time.fixedDeltaTime / 2);
             return;
         }
 
         if (_gonnaTeleport)
         {
+            if (didTeleport)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, entry.position, Time.fixedDeltaTime * 20);
+                return;
+            }
             _curMidway = Vector3.Lerp(midway, _tempLookT.position, distance);
             goalPos = _curMidway;
             forw = _tempLookT.position - transform.position;
+            _tempLerpSpeed = _transitLerpSpeed;
         }
 
         if (_follow || _gonnaTeleport)
@@ -129,7 +139,7 @@ public class CameraScript : MonoBehaviour, IPortalTransient
             forw = _targetLookTransform.position - transform.position;
         }
 
-        transform.forward = Vector3.Lerp(transform.forward, forw, Time.fixedDeltaTime);
+        transform.forward = Vector3.Lerp(transform.forward, forw, Time.fixedDeltaTime / 3);
     }
 
     private void Update()
@@ -139,7 +149,7 @@ public class CameraScript : MonoBehaviour, IPortalTransient
         {
             if (didTeleport)
             {
-                distance += Time.deltaTime * _lerpSpeed;
+                distance += Time.deltaTime * _lerpSpeed * 5;
             }
             else
             {
@@ -160,12 +170,11 @@ public class CameraScript : MonoBehaviour, IPortalTransient
         _gonnaTeleport = true;
         didTeleport = false;
         float dot = Mathf.Abs(Vector3.Dot(_flowerRB.velocity, entry.forward));
-        _transitLerpSpeed = dot * _transitLerpFactor * _flowerRB.velocity.magnitude;
         mag = (_flowerRB.transform.position - entry.position).magnitude;
 
         Vector3 diff = transform.position - entry.position;
         float dis = Vector3.Dot(diff, entry.forward);
-        lastDistance = distance = 0;
+        lastDistance = distance = 0.2f;
 
         _curMidway = midway = entry.position + Vector3.Dot(entry.forward, transform.position - entry.position) * entry.forward;
 
