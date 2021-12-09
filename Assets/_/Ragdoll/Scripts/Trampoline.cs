@@ -19,7 +19,7 @@ public class Trampoline : MonoBehaviour
             {
                 Vector3 vel = transform.right * shootSpeed.x + transform.up * shootSpeed.y + transform.forward * shootSpeed.z;
                 Rigidbody rb = c.gameObject.GetComponent<Rigidbody>();
-                rb.velocity = shootSpeed;
+                rb.velocity = vel;
                 flipper.SetStruggleTrue();
             }
         }

@@ -25,6 +25,7 @@ namespace DB.HeelFlip
             {
                 OnDeath?.Invoke();
                 _puppet.mode = PuppetMaster.Mode.Active;
+                _rb.isKinematic = true;
                 /*TimeManager.Instance.AddLayer(0);
                 TimeManager.Instance.DoWithDelay(1, () =>
                 {
@@ -126,26 +127,6 @@ namespace DB.HeelFlip
             if (!isFeetAttached.value && !_sliding)
                 _bodyT.rotation = Quaternion.AngleAxis(_angularVel, _bodyT.right) * _bodyT.rotation;
 
-            // manual sliding - now works with spline positioner
-            /*if (_sliding)
-            {
-                _bodyT.rotation = Quaternion.Slerp(
-                    _bodyT.rotation,
-                    Quaternion.LookRotation(transform.forward, transform.up),
-                    Time.fixedDeltaTime * 10
-                );
-                
-                if(slideNormal.magnitude > 0)
-                {
-                    transform.rotation = Quaternion.Slerp(
-                        transform.rotation,
-                        Quaternion.LookRotation(-slideNormal),
-                        Time.fixedDeltaTime * 10
-                    );
-                    _rb.velocity = -transform.up * 5;
-                }
-            }*/
-
             if (_sliding)
             {
                 _distance += Time.deltaTime * 20;
@@ -184,7 +165,7 @@ namespace DB.HeelFlip
                         _collider.enabled = true;
                     });
                     DeactivateSlide();
-                    _rb.velocity = shootDir * 20f;
+                    _rb.velocity = shootDir * 10f;
                 }
             }
 
@@ -235,6 +216,15 @@ namespace DB.HeelFlip
             {
                 CancelInvoke("DeactivateSlide");
 
+                slideNormal = collision.GetContact(0).normal;
+                float dot = Vector3.Dot(slideNormal, _bodyT.up);
+                print(dot);
+                if (dot < -0.9)
+                {
+                    DieQuestionMark();
+                    return;
+                }
+
                 if (!_sliding && _canSlide)
                 {
                     _rb.isKinematic = true;
@@ -250,7 +240,7 @@ namespace DB.HeelFlip
                     _positioner.transform.position = sample.position;
                     _positioner.SetDistance(_distance);
 
-                    _puppet.mode = PuppetMaster.Mode.Active;
+                    //_puppet.mode = PuppetMaster.Mode.Active;
                     _sliding = true;
                 }
             }

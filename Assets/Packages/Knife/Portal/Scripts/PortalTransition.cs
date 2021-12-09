@@ -11,7 +11,7 @@ namespace Knife.Portal
         public event UnityAction OnPortalClose;
 
         [SerializeField] private Transform entryPlane;
-        [SerializeField] private float transitThreshold = 0.3f;
+        [SerializeField] private float transitThreshold = 0.5f;
         [SerializeField] private Vector2 planeSize;
         [SerializeField] private PortalTransition exit;
         [SerializeField] private Color gizmosColor = Color.red;
@@ -69,7 +69,7 @@ namespace Knife.Portal
             var transient = other.GetComponent<IPortalTransient>();
             if (transient != null)
             {
-                var instanceID = other.transform.GetInstanceID();
+                /*var instanceID = other.transform.GetInstanceID();
                 for (int i = 0; i < transients.Count; i++)
                 {
                     if (transients[i].Transform.GetInstanceID() == instanceID)
@@ -77,7 +77,7 @@ namespace Knife.Portal
                         transients.RemoveAt(i);
                         break;
                     }
-                }
+                }*/
             }
         }
 
@@ -92,16 +92,9 @@ namespace Knife.Portal
                         var position = transitingObject.Transient.Position;
                         var localPosition = entryPlane.InverseTransformPoint(position);
 
-                        if (PositionInRect(localPosition, planeSize))
+                        if (Mathf.Abs(localPosition.z) < 1f)
                         {
-                            float threshold = 0;
-                            if (transitingObject.Transient.UseThreshold)
-                                threshold = Vector3.Dot(entryPlane.forward, transitingObject.Transform.forward) * transitThreshold;
-
-                            if (localPosition.z > threshold)
-                            {
-                                Transit(transitingObject, localPosition);
-                            }
+                            Transit(transitingObject, localPosition);
                         }
                     }
                 }

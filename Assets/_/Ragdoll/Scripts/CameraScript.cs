@@ -84,6 +84,7 @@ public class CameraScript : MonoBehaviour, IPortalTransient
     private void AfterTeleport(Transform exit)
     {
         didTeleport = true;
+        transform.parent = _lastPar;
     }
 
     private void SetOffset()
@@ -124,21 +125,33 @@ public class CameraScript : MonoBehaviour, IPortalTransient
             goalPos = _curMidway;
             forw = _tempLookT.position - transform.position;
             _tempLerpSpeed = _transitLerpSpeed;
+
+            _secondAnchor.position = Vector3.Lerp(
+                _secondAnchor.position,
+                goalPos,
+                Time.fixedDeltaTime * _tempLerpSpeed
+            );
+            transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, Time.fixedDeltaTime * 2);
+            transform.forward = Vector3.Lerp(transform.forward, forw, Time.fixedDeltaTime / 6);
+
+            return;
         }
 
         if (_follow || _gonnaTeleport)
         {
-            transform.position = Vector3.Lerp(
-                transform.position,
-                goalPos,
-                Time.fixedDeltaTime * _tempLerpSpeed
-            );
+
         }
         else if(!_gonnaTeleport)
         {
+            goalPos = _targetLookTransform.position + Vector3.up * 5 + Vector3.right * -5;
             forw = _targetLookTransform.position - transform.position;
         }
 
+        transform.position = Vector3.Lerp(
+            transform.position,
+            goalPos,
+            Time.fixedDeltaTime * _tempLerpSpeed
+        );
         transform.forward = Vector3.Lerp(transform.forward, forw, Time.fixedDeltaTime / 3);
     }
 
@@ -162,6 +175,8 @@ public class CameraScript : MonoBehaviour, IPortalTransient
     }
 
     Vector3 midway, _curMidway;
+    Transform _secondAnchor, _lastPar;
+
     float distance, mag, lastDistance, lastDiff = 0;
     Transform entry;
     private void BeforeTargetTeleport(Transform entry)
@@ -175,8 +190,11 @@ public class CameraScript : MonoBehaviour, IPortalTransient
         Vector3 diff = transform.position - entry.position;
         float dis = Vector3.Dot(diff, entry.forward);
         lastDistance = distance = 0.2f;
-
         _curMidway = midway = entry.position + Vector3.Dot(entry.forward, transform.position - entry.position) * entry.forward;
+        _secondAnchor = new GameObject().transform;
+        _secondAnchor.transform.position = _curMidway;
+        _lastPar = transform.parent;
+        transform.parent = _secondAnchor;
 
         _telDiff = transform.position - entry.forward * dis;
         _telDiff = ((_telDiff - entry.position).normalized) + entry.position - transform.position;
