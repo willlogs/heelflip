@@ -187,7 +187,6 @@ GameObject:
   - component: {fileID: 3598304700562662445}
   - component: {fileID: 3598304700562662444}
   - component: {fileID: 3598304700562662443}
-  - component: {fileID: 3598304700562662441}
   - component: {fileID: 3598304700562662440}
   - component: {fileID: 3598304700562662615}
   - component: {fileID: 8304363241976480358}
@@ -294,10 +293,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 3598304700562662441}
-        m_TargetAssemblyTypeName: PT.Utils.DestroyAfter, Assembly-CSharp
-        m_MethodName: DestroyAfterLifeTime
-        m_Mode: 1
+      - m_Target: {fileID: 8304363241976480358}
+        m_TargetAssemblyTypeName: HeelUpgrade, Assembly-CSharp
+        m_MethodName: Enter
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -312,20 +311,6 @@ MonoBehaviour:
   OnStay:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &3598304700562662441
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3598304700562662613}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5264a1125b270ce48ba7641d9a0cfb1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  callOnStart: 0
-  lifeTime: 0.1
 --- !u!65 &3598304700562662440
 BoxCollider:
   m_ObjectHideFlags: 0

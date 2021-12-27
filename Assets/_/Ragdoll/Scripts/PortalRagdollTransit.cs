@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Knife.Portal;
 using RootMotion.Dynamics;
+using PT.Utils;
 
 namespace DB.HeelFlip
 {
@@ -39,37 +40,46 @@ namespace DB.HeelFlip
             }
         }
 
+        bool canTeleport = true;
         public void Teleport(Vector3 position, Quaternion rotation, Transform entry, Transform exit)
         {
-            //BeforeTeleport?.Invoke(entry);
-            Quaternion before = transform.rotation;
-            Vector3 up = transform.up;
-            PuppetMaster.Mode def = _puppet.mode;
-            _puppet.mode = PuppetMaster.Mode.Kinematic;
+            if (canTeleport)
+            {
+                canTeleport = false;
+                //BeforeTeleport?.Invoke(entry);
+                Quaternion before = transform.rotation;
+                Vector3 up = transform.up;
+                PuppetMaster.Mode def = _puppet.mode;
+                _puppet.mode = PuppetMaster.Mode.Kinematic;
 
-            // x is for right, y is for up, z is for forward
-            float velMag;
-            Vector3 velCoord;
-            ToRelativeCoord(rb.velocity, out velMag, out velCoord);
-            Quaternion bodyTR = Quaternion.AngleAxis(180, exit.up) * (exit.rotation * Quaternion.Inverse(entry.rotation) * _bodyT.rotation);
+                // x is for right, y is for up, z is for forward
+                float velMag;
+                Vector3 velCoord;
+                ToRelativeCoord(rb.velocity, out velMag, out velCoord);
+                Quaternion bodyTR = Quaternion.AngleAxis(180, exit.up) * (exit.rotation * Quaternion.Inverse(entry.rotation) * _bodyT.rotation);
 
-            // change position and rotation
-            transform.position = position;
-            transform.rotation = rotation;
+                // change position and rotation
+                transform.position = position;
+                transform.rotation = rotation;
 
-            rb.velocity = (transform.right * velCoord.x + transform.up * velCoord.y + transform.forward * velCoord.z).normalized * velMag;
+                rb.velocity = (transform.right * velCoord.x + transform.up * velCoord.y + transform.forward * velCoord.z).normalized * velMag;
 
-            Vector3 diff = exit.position - transform.position;
-            diff.y = 0;
-            transform.rotation = Quaternion.LookRotation(diff.normalized, Vector3.up);
+                Vector3 diff = -(exit.position - transform.position);
+                diff.y = 0;
+                transform.rotation = Quaternion.LookRotation(diff.normalized, Vector3.up);
 
-            _bodyT.parent = null;
-            _bodyT.rotation = bodyTR;
-            _bodyT.transform.parent = transform;
-            _wentIn = true;
-            _puppet.Teleport(transform.position, transform.rotation, true);
-            _puppet.mode = def;
-            AfterTeleport?.Invoke(exit);
+                _bodyT.parent = null;
+                _bodyT.rotation = bodyTR;
+                _bodyT.transform.parent = transform;
+                _wentIn = true;
+                _puppet.Teleport(transform.position, transform.rotation, true);
+                _puppet.mode = def;
+                AfterTeleport?.Invoke(exit);
+                TimeManager.Instance.DoWithDelay(1, () =>
+                {
+                    canTeleport = true;
+                });
+            }
         }
 
         private void ToRelativeCoord(Vector3 input, out float mag, out Vector3 coord)

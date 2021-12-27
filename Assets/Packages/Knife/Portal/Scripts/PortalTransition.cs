@@ -81,7 +81,7 @@ namespace Knife.Portal
             }
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (IsPortalOpened)
             {

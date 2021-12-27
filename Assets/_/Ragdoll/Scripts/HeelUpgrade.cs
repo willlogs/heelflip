@@ -6,26 +6,21 @@ using UnityEngine;
 public class HeelUpgrade : MonoBehaviour
 {
     [SerializeField] private Transform _leftShoe, _rightShoe;
-    private void OnTriggerEnter(Collider other)
-    {
-        PMFlipper flipper = other.GetComponent<PMFlipper>();
-        if (flipper != null)
-        {
-            float dot = Vector3.Dot(flipper._bodyT.up, transform.up);
-            if (dot > 0.9)
-            {
-                flipper.shoes.LevelUp();
-            }
-            else
-            {
-                _leftShoe.parent = null;
-                _leftShoe.gameObject.AddComponent<BoxCollider>();
-                _leftShoe.gameObject.AddComponent<Rigidbody>();
+    private PMFlipper _flipper;
+    private bool used = false;
 
-                _rightShoe.parent = null;
-                _rightShoe.gameObject.AddComponent<BoxCollider>();
-                _rightShoe.gameObject.AddComponent<Rigidbody>();
-            }
+    public void Enter(Collider other)
+    {
+        if (!used)
+        {
+            used = true;
+            _flipper.shoes.LevelUp();
+            Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        _flipper = FindObjectOfType<PMFlipper>();
     }
 }

@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 namespace DB.HeelFlip
 {
@@ -19,6 +20,14 @@ namespace DB.HeelFlip
         public Vector3 jump;
         public StickyShoes shoes;
 
+        public void Restart()
+        {
+            TimeManager.Instance.DoWithDelay(3, () =>
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            });
+        }
+
         public void DieQuestionMark()
         {
             if (!isFeetAttached.value)
@@ -26,6 +35,7 @@ namespace DB.HeelFlip
                 OnDeath?.Invoke();
                 _puppet.mode = PuppetMaster.Mode.Active;
                 _rb.isKinematic = true;
+                Restart();
                 /*TimeManager.Instance.AddLayer(0);
                 TimeManager.Instance.DoWithDelay(1, () =>
                 {
@@ -68,7 +78,6 @@ namespace DB.HeelFlip
         public void CheckAngle(Collision c)
         {
             float dot = Vector3.Dot(_bodyT.up, c.GetContact(0).normal);
-            print(dot);
             if (dot < 0.9f)
             {
                 DieQuestionMark();
@@ -102,12 +111,12 @@ namespace DB.HeelFlip
 
         private void Update()
         {
-            if (Input.GetKeyUp(KeyCode.Space))
+            if (Input.GetKeyUp(KeyCode.Space) || Input.GetMouseButtonUp(0))
             {
                 ToggleClinch();
             }
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
             {
                 ToggleClinch();
             }
@@ -157,15 +166,17 @@ namespace DB.HeelFlip
 
                 if (_sample.percent >= 0.98f)
                 {
+                    print("Shoot");
                     Vector3 shootDir = angle1 > angle2 ? _bodyT.up : -_bodyT.up;
                     _canSlide = false;
-                    TimeManager.Instance.DoWithDelay(0.1f, () =>
+                    DeactivateSlide();
+                    _rb.velocity = shootDir * 10f;
+                    _collider.enabled = false;
+                    TimeManager.Instance.DoWithDelay(1f, () =>
                     {
                         _canSlide = true;
                         _collider.enabled = true;
                     });
-                    DeactivateSlide();
-                    _rb.velocity = shootDir * 10f;
                 }
             }
 
@@ -218,7 +229,7 @@ namespace DB.HeelFlip
 
                 slideNormal = collision.GetContact(0).normal;
                 float dot = Vector3.Dot(slideNormal, _bodyT.up);
-                print(dot);
+                
                 if (dot < -0.9)
                 {
                     DieQuestionMark();
@@ -227,21 +238,26 @@ namespace DB.HeelFlip
 
                 if (!_sliding && _canSlide)
                 {
-                    _rb.isKinematic = true;
-                    _rb.useGravity = false;
-                    //_collider.enabled = false;
-                    OnSlide?.Invoke();
-                    _beforeSlideRotation = transform.rotation;
-                    _positioner.transform.parent = null;
-                    SplineComputer spline = collision.gameObject.GetComponent<SplineComputer>();
-                    SplineSample sample = spline.Project(transform.position);
-                    _distance = (float)sample.percent * spline.CalculateLength();
-                    _positioner.spline = spline;
-                    _positioner.transform.position = sample.position;
-                    _positioner.SetDistance(_distance);
+                    Slide s = collision.gameObject.GetComponent<Slide>();
+                    if (s != null && !s._used)
+                    {
+                        s._used = true;
 
-                    //_puppet.mode = PuppetMaster.Mode.Active;
-                    _sliding = true;
+                        _rb.isKinematic = true;
+                        _rb.useGravity = false;
+                        //_collider.enabled = false;
+                        OnSlide?.Invoke();
+                        _beforeSlideRotation = transform.rotation;
+                        _positioner.transform.parent = null;
+                        SplineComputer spline = collision.gameObject.GetComponent<SplineComputer>();
+                        SplineSample sample = spline.Project(transform.position);
+                        _distance = (float)sample.percent * spline.CalculateLength();
+                        _positioner.spline = spline;
+                        _positioner.transform.position = sample.position;
+                        _positioner.SetDistance(_distance);
+
+                        _sliding = true;
+                    }
                 }
             }
         }
