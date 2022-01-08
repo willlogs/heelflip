@@ -28,6 +28,17 @@ namespace DB.HeelFlip
             });
         }
 
+        public void Win()
+        {
+            int lvl = PlayerPrefs.GetInt("lvl") + 1;
+            PlayerPrefs.SetInt("lvl", lvl);
+
+            TimeManager.Instance.DoWithDelay(3, () =>
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            });
+        }
+
         public void DieQuestionMark()
         {
             if (!isFeetAttached.value)
@@ -111,7 +122,6 @@ namespace DB.HeelFlip
 
             int lvl = PlayerPrefs.GetInt("lvl") + 1;
             lvltxt.text = "LEVEL " + lvl;
-            PlayerPrefs.SetInt("lvl", lvl + 1);
         }
 
         bool canCountFlip = false;
