@@ -14,7 +14,7 @@ namespace DB.HeelFlip
 {
     public class PMFlipper : MonoBehaviour
     {
-        public UnityEvent OnJump, OnSlide, OnStopSlide, OnDeath;
+        public UnityEvent OnJump, OnSlide, OnStopSlide, OnDeath, OnFlip;
         public BoolCondition isFeetAttached;
         public LayerMask layerMask;
         public Vector3 jump;
@@ -98,6 +98,7 @@ namespace DB.HeelFlip
         [SerializeField] private LayerMask _slideLayer;
         [SerializeField] private SplinePositioner _positioner;
         [SerializeField] private Collider _collider;
+        [SerializeField] private UnityEngine.UI.Text lvltxt;
 
         private Vector3 _rotationPivot;
         private float _distance;
@@ -107,10 +108,27 @@ namespace DB.HeelFlip
         {
             _rb.centerOfMass = Vector3.zero;
             _puppet.mode = PuppetMaster.Mode.Kinematic;
+
+            int lvl = PlayerPrefs.GetInt("lvl") + 1;
+            lvltxt.text = "LEVEL " + lvl;
+            PlayerPrefs.SetInt("lvl", lvl + 1);
         }
 
+        bool canCountFlip = false;
         private void Update()
         {
+            float updot = Vector3.Dot(_bodyT.up, Vector3.up);
+            if (updot < 0 && !canCountFlip)
+            {
+                canCountFlip = true;
+            }
+
+            if (updot > 0.8 && canCountFlip)
+            {
+                canCountFlip = false;
+                OnFlip?.Invoke();
+            }
+
             if (Input.GetKeyUp(KeyCode.Space) || Input.GetMouseButtonUp(0))
             {
                 ToggleClinch();
@@ -155,7 +173,7 @@ namespace DB.HeelFlip
                     _bodyT.rotation,
                     targetBodyRotation,
                     Time.deltaTime * 5
-                );
+                );                
 
                 if((transform.position - _positioner.transform.position).magnitude < 5)
                     transform.position = Vector3.Lerp(

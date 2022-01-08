@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/_/Ragdoll/Scenes/Ragdoll_NewSetup.unity
+    guid: 56d7d3260db3bfa46a20da9e63ccf396
   m_configObjects: {}
